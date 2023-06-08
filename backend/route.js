@@ -7,6 +7,7 @@ app.get("/api/data", (req, res) => {
   async function getValues() {
     const query = req.query.sort ? req.query.sort : false;
 
+    
     const values = await data.getData(query);
 
     res.json(values);
