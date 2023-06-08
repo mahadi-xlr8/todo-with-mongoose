@@ -21,25 +21,31 @@ async function addData(value, checked, important) {
     important,
   });
   await data.save();
-  
 }
-async function updateData(id,value){
-  const list=await Data.findOne({_id:id})
-  list.value=value;
-  const result=await list.save()
+async function updateData(id, value, checked, important) {
+  const list = await Data.findOne({ _id: id });
+  list.value = value;
+  list.checked = checked;
+  list.important = important;
+  const result = await list.save();
   return result;
 }
 
-async function getAllData() {
-  const data = await Data.find();
-  return data;
+async function getAllData(value) {
+  if (value) {
+    const temp = {};
+    temp[value] = -1;
+    const data = await Data.find().sort(temp);
+    return data;
+  }
+  return await Data.find()
 }
 
-async function deleteData(id){
-  const result=await Data.deleteOne({_id:id})
-  return result;
+async function deleteData(id) {
+  const result = await Data.deleteOne({ _id: id });
+  return id;
 }
 module.exports.getData = getAllData;
 module.exports.addData = addData;
 module.exports.delete = deleteData;
-module.exports.updateData=updateData;
+module.exports.updateData = updateData;

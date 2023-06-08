@@ -5,12 +5,14 @@ app.use(express.json());
 
 app.get("/api/data", (req, res) => {
   async function getValues() {
-    const values = await data.getData();
+    const query = req.query.sort ? req.query.sort : false;
+
+    const values = await data.getData(query);
+
     res.json(values);
   }
-  getValues()
+  getValues();
 });
-
 
 app.post("/api/data", (req, res) => {
   async function add() {
@@ -22,19 +24,24 @@ app.post("/api/data", (req, res) => {
 
 app.put("/api/data", (req, res) => {
   async function temp() {
-    const a = await data.updateData(req.body.id, req.body.value);
+    const a = await data.updateData(
+      req.body.id,
+      req.body.value,
+      req.body.checked,
+      req.body.important
+    );
     res.send(a);
   }
   temp();
 });
 
-app.delete("/api/data",(req,res)=>{
-  async function temp(){
-    const result= await data.delete(req.body.id)
-    res.send(result)
+app.delete("/api/data", (req, res) => {
+  async function temp() {
+    const result = await data.delete(req.body.id);
+    res.send("deleted successfully!");
   }
-  temp()
-})
+  temp();
+});
 
 const port = process.env.PORT || 5000;
 app.listen(port, () => console.log("listing on port " + port + "..."));
